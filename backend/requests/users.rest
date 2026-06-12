@@ -1,0 +1,108 @@
+### Create Student User
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Kunal Joshi",
+  "email": "kunal@example.com",
+  "password": "secret123",
+  "role": "student"
+}
+
+###
+
+### Create Organizer User
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Event Organizer",
+  "email": "organizer@example.com",
+  "password": "secret123",
+  "role": "organizer"
+}
+
+###
+
+### Create Admin User
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Admin User",
+  "email": "admin@example.com",
+  "password": "secret123",
+  "role": "admin"
+}
+
+###
+
+### Validation Test - Missing Email
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Missing Email",
+  "password": "secret123",
+  "role": "student"
+}
+
+###
+
+### Validation Test - Missing Password
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Missing Password",
+  "email": "missingpassword@example.com",
+  "role": "student"
+}
+
+###
+
+### Validation Test - Missing Full Name
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "email": "missingname@example.com",
+  "password": "secret123",
+  "role": "student"
+}
+
+###
+
+### Validation Test - Invalid Role
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Invalid Role User",
+  "email": "invalidrole@example.com",
+  "password": "secret123",
+  "role": "banana"
+}
+
+###
+
+### Duplicate Email Test
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "fullName": "Duplicate User",
+  "email": "kunal@example.com",
+  "password": "secret123",
+  "role": "student"
+}
+
+###
