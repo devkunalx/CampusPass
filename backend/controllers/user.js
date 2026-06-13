@@ -7,7 +7,7 @@ usersRouter.get('/all', async (request, response) => {
   response.json(users)
 })
 
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/register', async (request, response) => {
   const { fullName, email, password, role } = request.body
 
   const saltRounds = 10
