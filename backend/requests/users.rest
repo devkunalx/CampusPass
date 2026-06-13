@@ -106,3 +106,9 @@ Content-Type: application/json
 }
 
 ###
+
+### Get all Users
+
+GET http://localhost:3001/api/users/all
+
+###

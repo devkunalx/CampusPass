@@ -1,0 +1,90 @@
+### Login - Student User (Valid Credentials)
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "email": "kunal@example.com",
+  "password": "secret123"
+}
+
+###
+
+### Login - Organizer User
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "email": "organizer@example.com",
+  "password": "secret123"
+}
+
+###
+
+### Login - Admin User
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "secret123"
+}
+
+###
+
+### Invalid Password
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "email": "kunal@example.com",
+  "password": "wrongpassword"
+}
+
+###
+
+### Invalid Email
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "email": "doesnotexist@example.com",
+  "password": "secret123"
+}
+
+###
+
+### Missing Password
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "email": "kunal@example.com"
+}
+
+###
+
+### Missing Email
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "password": "secret123"
+}
+
+###
+
+### Empty Request Body
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{}
+
+###
