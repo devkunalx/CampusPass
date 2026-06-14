@@ -15,7 +15,7 @@ const eventSchema = new mongoose.Schema(
 
     category: {
     type: String,
-    enum: ['workshop', 'hackathon', 'seminar', 'cultural', 'sports']
+    enum: ['workshop', 'hackathon', 'seminar', 'cultural', 'sports', 'technology']
     },
 
     date: {
@@ -51,13 +51,11 @@ const eventSchema = new mongoose.Schema(
   }
 )
 
-eventSchema.pre('save', function (next) {
+eventSchema.pre('save', function () {
   if (this.isNew) {
     this.availableSeats = this.totalSeats
   }
-  next()
 })
-
 
 
 module.exports = mongoose.model('Event', eventSchema)

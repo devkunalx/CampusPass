@@ -1,0 +1,135 @@
+@baseUrl = http://localhost:3001/api/events
+
+@studentToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imt1bmFsQGV4YW1wbGUuY29tIiwiaWQiOiI2YTJiYWNhYTAwZDE2MWExMzA1M2RmZGMiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc4MTQzOTE1MCwiZXhwIjoxNzgyMDQzOTUwfQ.WsaMwAuwmqhHWdiJm_vKfn2aMO_H0X-fWACvhdfl6QY
+
+@organizerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9yZ2FuaXplckBleGFtcGxlLmNvbSIsImlkIjoiNmEyYmFjY2EwMGQxNjFhMTMwNTNkZmRkIiwicm9sZSI6Im9yZ2FuaXplciIsImlhdCI6MTc4MTQzOTE4NywiZXhwIjoxNzgyMDQzOTg3fQ.v1bGiyP7dgNq_trfBby7ZLoGBuokUH-hJNlpoZswkv8
+
+@organizer2Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9yZ2FuaXplcjJAZXhhbXBsZS5jb20iLCJpZCI6IjZhMmU5YjNjMGYyODUxMjliYWFlYjc2YiIsInJvbGUiOiJvcmdhbml6ZXIiLCJpYXQiOjE3ODE0NDA0MTcsImV4cCI6MTc4MjA0NTIxN30.cGLaDjWm0pUZj9Gh7Y3bi2Rat3yw53kPoxd60m0Fecg
+
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWQiOiI2YTJiYWQwMzAwZDE2MWExMzA1M2RmZGYiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODE0MzkyMDcsImV4cCI6MTc4MjA0NDAwN30.L5qCoKN1o8fIG8OS2SBxRauUg2HlW_GFfAfdYsGSgs8
+
+### Get all events
+
+GET http://localhost:3001/api/events
+Authorization: Bearer {{organizer2Token}}
+
+### Create Event (Organizer 1)
+
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{organizerToken}}
+
+{
+"title": "Tech Fest 2026",
+"description": "Annual Technical Festival",
+"category": "technology",
+"date": "2026-08-15T09:00:00.000Z",
+"venue": "College Auditorium",
+"totalSeats": 200
+}
+
+### Create Event (Organizer 2)
+
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{organizer2Token}}
+
+{
+"title": "Hackathon 2026",
+"description": "24 Hour Coding Competition",
+"category": "hackathon",
+"date": "2026-09-20T10:00:00.000Z",
+"venue": "Innovation Center",
+"totalSeats": 150
+}
+
+### Create Event (Admin)
+
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+"title": "Admin Managed Event",
+"description": "Created by admin",
+"category": "cultural",
+"date": "2026-10-01T10:00:00.000Z",
+"venue": "Conference Hall",
+"totalSeats": 100
+}
+
+### Create Event (Student - should fail)
+
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+
+{
+"title": "Student Event",
+"description": "Should fail",
+"category": "seminar",
+"date": "2026-11-01T10:00:00.000Z",
+"venue": "Room 101",
+"totalSeats": 50
+}
+
+### Get Event By Id
+
+GET {{baseUrl}}/6a2e9f8b35c5aca427eb9da8
+Authorization: Bearer {{studentToken}}
+
+### Update Event (Owner Organizer)
+
+PATCH {{baseUrl}}/6a2e9f8b35c5aca427eb9da8
+Content-Type: application/json
+Authorization: Bearer {{organizerToken}}
+
+{
+"venue": "Updated Auditorium",
+"totalSeats": 250
+}
+
+### Update Event (Different Organizer - should fail)
+
+PATCH {{baseUrl}}/6a2e9f8b35c5aca427eb9da8
+Content-Type: application/json
+Authorization: Bearer {{organizer2Token}}
+
+{
+"venue": "Unauthorized Update"
+}
+
+### Update Event (Admin)
+
+PATCH {{baseUrl}}/6a2e9f8b35c5aca427eb9da8
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+"venue": "Admin Updated Venue"
+}
+
+### Update Event With Invalid Seats
+
+PATCH {{baseUrl}}/6a2e9f8b35c5aca427eb9da8
+Content-Type: application/json
+Authorization: Bearer {{organizerToken}}
+
+{
+"totalSeats": -10
+}
+
+### Delete Event (Different Organizer - should fail)
+
+DELETE {{baseUrl}}/6a2e9f8b35c5aca427eb9da8
+Authorization: Bearer {{organizer2Token}}
+
+### Delete Event (Owner Organizer)
+
+DELETE {{baseUrl}}/6a2e9f8b35c5aca427eb9da8
+Authorization: Bearer {{organizerToken}}
+
+### Delete Event (Admin)
+
+DELETE {{baseUrl}}/6a2e9f8b35c5aca427eb9da8
+Authorization: Bearer {{adminToken}}

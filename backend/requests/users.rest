@@ -14,13 +14,13 @@ Content-Type: application/json
 
 ### Create Organizer User
 
-POST http://localhost:3001/api/users
+POST http://localhost:3001/api/users/register
 Content-Type: application/json
 
 {
-  "fullName": "Event Organizer",
-  "email": "organizer@example.com",
-  "password": "secret123",
+  "fullName": "Event Organizer2",
+  "email": "organizer2@example.com",
+  "password": "secret1234",
   "role": "organizer"
 }
 
