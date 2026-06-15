@@ -1,0 +1,107 @@
+@baseUrl = http://localhost:3001/api
+
+@studentToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imt1bmFsQGV4YW1wbGUuY29tIiwiaWQiOiI2YTJiYWNhYTAwZDE2MWExMzA1M2RmZGMiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc4MTQzOTE1MCwiZXhwIjoxNzgyMDQzOTUwfQ.WsaMwAuwmqhHWdiJm_vKfn2aMO_H0X-fWACvhdfl6QY
+@organizerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9yZ2FuaXplckBleGFtcGxlLmNvbSIsImlkIjoiNmEyYmFjY2EwMGQxNjFhMTMwNTNkZmRkIiwicm9sZSI6Im9yZ2FuaXplciIsImlhdCI6MTc4MTQzOTE4NywiZXhwIjoxNzgyMDQzOTg3fQ.v1bGiyP7dgNq_trfBby7ZLoGBuokUH-hJNlpoZswkv8
+
+@eventId = 6a2fbb74f0a4117b8227c3bf
+
+### ==========================================
+
+### REGISTER FOR EVENT (Student)
+
+### Expected: 201 Created
+
+### ==========================================
+
+POST {{baseUrl}}/events/{{eventId}}/register
+Authorization: Bearer {{studentToken}}
+Content-Type: application/json
+
+### ==========================================
+
+### REGISTER AGAIN (Should Fail)
+
+### Expected: 403 Forbidden
+
+### ==========================================
+
+POST {{baseUrl}}/events/{{eventId}}/register
+Authorization: Bearer {{studentToken}}
+Content-Type: application/json
+
+### ==========================================
+
+### ORGANIZER TRIES TO REGISTER
+
+### Expected: 403 Forbidden
+
+### ==========================================
+
+POST {{baseUrl}}/events/{{eventId}}/register
+Authorization: Bearer {{organizerToken}}
+Content-Type: application/json
+
+### ==========================================
+
+### CANCEL REGISTRATION
+
+### Expected: 200 OK
+
+### ==========================================
+
+PATCH {{baseUrl}}/events/{{eventId}}/register
+Authorization: Bearer {{studentToken}}
+Content-Type: application/json
+
+### ==========================================
+
+### CANCEL AGAIN
+
+### Expected: 400 Bad Request
+
+### ==========================================
+
+PATCH {{baseUrl}}/events/{{eventId}}/register
+Authorization: Bearer {{studentToken}}
+Content-Type: application/json
+
+### ==========================================
+
+### RE-REGISTER AFTER CANCELLATION
+
+### Expected: 200 OK
+
+### (status changes cancelled -> confirmed)
+
+### ==========================================
+
+POST {{baseUrl}}/events/{{eventId}}/register
+Authorization: Bearer {{studentToken}}
+Content-Type: application/json
+
+### ==========================================
+
+### INVALID EVENT ID
+
+### Expected: 404 Not Found
+
+### ==========================================
+
+POST {{baseUrl}}/events/684000000000000000000000/register
+Authorization: Bearer {{studentToken}}
+Content-Type: application/json
+
+### ==========================================
+
+### CHECK EVENT SEATS
+
+### Expected:
+
+### availableSeats decreases on register
+
+### availableSeats increases on cancel
+
+### ==========================================
+
+GET {{baseUrl}}/events/{{eventId}}
+Authorization: Bearer {{studentToken}}
