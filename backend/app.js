@@ -32,7 +32,7 @@ app.use(middleware.requestLogger)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/events',authenticateUser, eventRouter)
-// app.use('api/me', authenticateUser, eventRouter)
+app.use('api/me', authenticateUser, studentRouter)
 
 // Error and endpoint middlewares
 app.use(middleware.unknownEndpoint)

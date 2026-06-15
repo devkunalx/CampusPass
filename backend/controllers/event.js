@@ -180,4 +180,36 @@ eventsRouter.patch('/:id/register', authorize('student'), async (request, respon
     return response.status(200).json(cancelledRegisteration)
 })
 
+eventsRouter.get('/:id/registrations', authorize('organizer', 'admin'), async (request, response) => {
+
+    const id = request.params.id
+    const event = await Event.findById(id)
+
+    if (!event) {
+        return response.status(404).json({
+            error : 'Event not found'
+        })
+    }
+
+    if (
+        request.user.role !== 'admin' &&
+        event.organizer.toString() !== request.user._id.toString()
+        ) {
+        return response.status(403).json({
+            error: 'You are not allowed to view registrations for this event'
+    })
+    }
+
+    const registrations = Event.find({event : id})
+        .populate(
+        'event',
+        ['title', 'date', 'venue', 'category']
+        )
+        .populate(
+        'user',
+        ['fullName', 'email']
+        )
+
+    return response.json(registrations)
+})
 module.exports = eventsRouter
