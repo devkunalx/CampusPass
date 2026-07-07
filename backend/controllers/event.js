@@ -212,4 +212,6 @@ eventsRouter.get('/:id/registrations', authorize('organizer', 'admin'), async (r
 
     return response.json(registrations)
 })
+
+
 module.exports = eventsRouter
