@@ -1,6 +1,6 @@
 ### Create Student User
 
-POST http://localhost:3001/api/users
+POST http://localhost:3001/api/users/register
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 
 ### Create Admin User
 
-POST http://localhost:3001/api/users
+POST http://localhost:3001/api/users/register
 Content-Type: application/json
 
 {
@@ -42,7 +42,7 @@ Content-Type: application/json
 
 ### Validation Test - Missing Email
 
-POST http://localhost:3001/api/users
+POST http://localhost:3001/api/users/register
 Content-Type: application/json
 
 {
@@ -55,7 +55,7 @@ Content-Type: application/json
 
 ### Validation Test - Missing Password
 
-POST http://localhost:3001/api/users
+POST http://localhost:3001/api/users/register
 Content-Type: application/json
 
 {

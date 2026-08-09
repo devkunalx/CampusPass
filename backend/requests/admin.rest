@@ -1,0 +1,56 @@
+### =========================================
+### ADMIN DASHBOARD
+### =========================================
+
+GET http://localhost:3001/api/admin/dashboard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWQiOiI2YTYzNmJhMDFhYjY4Yzk3NWZlMDQ3YmMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODUzMzE3ODAsImV4cCI6MTc4NTkzNjU4MH0.EE_LkXEIYFRONl4mLgnXVEHjw4LnEemQo1AfU8CWKrE
+
+
+###
+
+### =========================================
+### GET USERS (PAGE 1)
+### =========================================
+
+GET http://localhost:3001/api/admin/users?page=1&limit=5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWQiOiI2YTYzNmJhMDFhYjY4Yzk3NWZlMDQ3YmMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODUzMzE3ODAsImV4cCI6MTc4NTkzNjU4MH0.EE_LkXEIYFRONl4mLgnXVEHjw4LnEemQo1AfU8CWKrE
+
+
+###
+
+### =========================================
+### GET USERS (PAGE 2)
+### =========================================
+
+GET http://localhost:3001/api/admin/users?page=2&limit=5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWQiOiI2YTYzNmJhMDFhYjY4Yzk3NWZlMDQ3YmMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODUzMzE3ODAsImV4cCI6MTc4NTkzNjU4MH0.EE_LkXEIYFRONl4mLgnXVEHjw4LnEemQo1AfU8CWKrE
+
+
+###
+
+### =========================================
+### GET EVENTS (PAGE 1)
+### =========================================
+
+GET http://localhost:3001/api/admin/events?page=1&limit=6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWQiOiI2YTYzNmJhMDFhYjY4Yzk3NWZlMDQ3YmMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODUzMzE3ODAsImV4cCI6MTc4NTkzNjU4MH0.EE_LkXEIYFRONl4mLgnXVEHjw4LnEemQo1AfU8CWKrE
+
+
+###
+
+### =========================================
+### GET EVENTS (PAGE 2)
+### =========================================
+
+GET http://localhost:3001/api/admin/events?page=2&limit=6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWQiOiI2YTYzNmJhMDFhYjY4Yzk3NWZlMDQ3YmMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODUzMzE3ODAsImV4cCI6MTc4NTkzNjU4MH0.EE_LkXEIYFRONl4mLgnXVEHjw4LnEemQo1AfU8CWKrE
+
+
+###
+
+### =========================================
+### DELETE EVENT
+### =========================================
+
+DELETE http://localhost:3001/api/admin/events/6a645a699fc20dbc9ca12690
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWQiOiI2YTYzNmJhMDFhYjY4Yzk3NWZlMDQ3YmMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3ODUzMzE3ODAsImV4cCI6MTc4NTkzNjU4MH0.EE_LkXEIYFRONl4mLgnXVEHjw4LnEemQo1AfU8CWKrE

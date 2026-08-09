@@ -11,7 +11,7 @@ const cancelRegistration = async (eventId) => {
 };
 
 const getMyRegistrations = async () => {
-  const response = await api.get("/student/registrations");
+  const response = await api.get("/students/registrations");
   return response.data;
 };
 

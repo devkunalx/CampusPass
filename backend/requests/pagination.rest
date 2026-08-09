@@ -1,0 +1,45 @@
+### Get Page 1 (6 events)
+GET http://localhost:3001/api/events?page=1&limit=6
+Content-Type: application/json
+
+
+###
+
+### Get Page 2 (6 events)
+GET http://localhost:3001/api/events?page=2&limit=6
+Content-Type: application/json
+
+
+###
+
+### Get Page 3 (6 events)
+GET http://localhost:3001/api/events?page=3&limit=6
+Content-Type: application/json
+
+
+###
+
+### Get Only 3 Events
+GET http://localhost:3001/api/events?page=1&limit=3
+Content-Type: application/json
+
+
+###
+
+### Get Last Page
+GET http://localhost:3001/api/events?page=100&limit=6
+Content-Type: application/json
+
+
+###
+
+### Invalid Page (should default to page 1 if handled)
+GET http://localhost:3001/api/events?page=-1&limit=6
+Content-Type: application/json
+
+
+###
+
+### Invalid Limit (should default to 6 if handled)
+GET http://localhost:3001/api/events?page=1&limit=0
+Content-Type: application/json

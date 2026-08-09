@@ -3,8 +3,9 @@ import { useState } from "react";
 const EventCard = ({
   event,
   role,
-  isRegistered,
+  registrationStatus,
   onRegister,
+  onDelete,
 }) => {
   const [registering, setRegistering] = useState(false);
 
@@ -17,111 +18,258 @@ const EventCard = ({
     }
   };
 
+  const seatColor =
+    event.availableSeats === 0
+      ? "bg-red-100 text-red-700"
+      : event.availableSeats <= 5
+      ? "bg-yellow-100 text-yellow-700"
+      : "bg-green-100 text-green-700";
+
+  const now = new Date();
+
+  const registrationStart = event.registrationStart
+    ? new Date(event.registrationStart)
+    : null;
+
+  const registrationEnd = event.registrationEnd
+    ? new Date(event.registrationEnd)
+    : null;
+
+  const registrationNotStarted =
+    registrationStart && now < registrationStart;
+
+  const registrationClosed =
+    registrationEnd && now > registrationEnd;
+
+  const formatTime = (time) => {
+    if (!time) return "-";
+
+    const [hours, minutes] = time.split(":");
+
+    const date = new Date();
+    date.setHours(hours, minutes);
+
+    return date.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  };
+
   return (
-    <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition">
+    <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 
-      {/* Title */}
+      {/* Header */}
 
-      <h2 className="text-2xl font-bold text-gray-800">
-        {event.title}
-      </h2>
+      <div className="p-6">
 
-      {/* Category */}
+        <div className="flex justify-between items-start gap-4">
 
-      <span className="inline-block mt-3 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium capitalize">
-        {event.category}
-      </span>
+          <h2 className="text-2xl font-bold text-gray-800 line-clamp-2">
+            {event.title}
+          </h2>
 
-      {/* Event Details */}
-
-      <div className="mt-5 space-y-3 text-gray-600">
-
-        <p>
-          📅{" "}
-          <span className="font-medium">
-            {new Date(event.date).toLocaleDateString()}
+          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold capitalize whitespace-nowrap">
+            {event.category}
           </span>
-        </p>
 
-        <p>
-          📍{" "}
-          <span className="font-medium">
-            {event.venue}
-          </span>
-        </p>
+        </div>
 
-        <p>
-          👤{" "}
-          <span className="font-medium">
-            {event.organizer?.fullName}
-          </span>
-        </p>
-
-        <p>
-          💺{" "}
-          <span className="font-medium">
-            {event.availableSeats} / {event.totalSeats} seats available
-          </span>
+        <p className="mt-4 text-gray-500 text-sm leading-6 line-clamp-3">
+          {event.description || "No description available."}
         </p>
 
       </div>
 
-      {/* Buttons */}
+      {/* Details */}
 
-      <div className="mt-6">
+      <div className="border-t border-gray-100 px-6 py-5 space-y-4 text-gray-700">
+
+        <div className="flex justify-between">
+
+          <span>📅 Date</span>
+
+          <span className="font-semibold">
+            {new Date(event.date).toLocaleDateString()}
+          </span>
+
+        </div>
+
+        <div className="flex justify-between">
+
+          <span>🕒 Event Time</span>
+
+          <span className="font-semibold">
+            {formatTime(event.startTime)} -{" "}
+            {formatTime(event.endTime)}
+          </span>
+
+        </div>
+
+        <div className="flex justify-between gap-3">
+
+          <span>📝 Registration</span>
+
+          <div className="text-right text-sm font-semibold">
+
+            <p>
+              Opens
+              <br />
+              {registrationStart
+                ? registrationStart.toLocaleString()
+                : "-"}
+            </p>
+
+            <p className="mt-2">
+              Closes
+              <br />
+              {registrationEnd
+                ? registrationEnd.toLocaleString()
+                : "-"}
+            </p>
+
+          </div>
+
+        </div>
+
+        <div className="flex justify-between gap-3">
+
+          <span>📍 Venue</span>
+
+          <span className="font-semibold text-right">
+            {event.venue}
+          </span>
+
+        </div>
+
+        <div className="flex justify-between gap-3">
+
+          <span>👤 Organizer</span>
+
+          <span className="font-semibold text-right">
+            {event.organizer?.fullName}
+          </span>
+
+        </div>
+
+        <div className="flex justify-between items-center">
+
+          <span>Seats</span>
+
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-semibold ${seatColor}`}
+          >
+            {event.availableSeats}/{event.totalSeats}
+          </span>
+
+        </div>
+
+      </div>
+
+      {/* Footer */}
+
+      <div className="bg-gray-50 p-6">
 
         {role === "student" && (
           <>
-            {isRegistered ? (
+            {/* Registration Status */}
+
+            <div className="mb-4 flex justify-center">
+
+              {registrationNotStarted ? (
+
+                <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-sm font-medium">
+                  Registration Opens Soon
+                </span>
+
+              ) : registrationClosed ? (
+
+                <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium">
+                  Registration Closed
+                </span>
+
+              ) : (
+
+                <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+                  Registration Open
+                </span>
+
+              )}
+
+            </div>
+
+            {registrationStatus === "confirmed" ? (
+
               <button
                 disabled
-                className="w-full bg-green-600 text-white py-2 rounded-lg cursor-not-allowed"
+                className="w-full bg-green-600 text-white py-3 rounded-xl font-semibold cursor-not-allowed"
               >
                 ✓ Registered
               </button>
-            ) : event.availableSeats === 0 ? (
+
+            ) : registrationStatus === "waitlisted" ? (
+
               <button
                 disabled
-                className="w-full bg-gray-400 text-white py-2 rounded-lg cursor-not-allowed"
+                className="w-full bg-yellow-500 text-white py-3 rounded-xl font-semibold cursor-not-allowed"
               >
-                Event Full
+                ⏳ Waitlisted
               </button>
-            ) : (
+
+            ) : registrationNotStarted ? (
+
+              <button
+                disabled
+                className="w-full bg-gray-400 text-white py-3 rounded-xl font-semibold cursor-not-allowed"
+              >
+                Registration Opens Soon
+              </button>
+
+            ) : registrationClosed ? (
+
+              <button
+                disabled
+                className="w-full bg-red-500 text-white py-3 rounded-xl font-semibold cursor-not-allowed"
+              >
+                Registration Closed
+              </button>
+
+            ) : event.availableSeats === 0 ? (
+
               <button
                 onClick={handleRegister}
                 disabled={registering}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition disabled:bg-blue-400 disabled:cursor-not-allowed"
+                className="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-3 rounded-xl font-semibold transition disabled:bg-yellow-400 disabled:cursor-not-allowed"
               >
-                {registering ? "Registering..." : "Register"}
+                {registering
+                  ? "Joining Waitlist..."
+                  : "Join Waitlist"}
               </button>
+
+            ) : (
+
+              <button
+                onClick={handleRegister}
+                disabled={registering}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition disabled:bg-blue-400 disabled:cursor-not-allowed"
+              >
+                {registering
+                  ? "Registering..."
+                  : "Register"}
+              </button>
+
             )}
           </>
         )}
 
-        {role === "organizer" && (
-          <div className="flex gap-3">
-
-            <button
-              className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg"
-            >
-              Edit
-            </button>
-
-            <button
-              className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
-            >
-              Delete
-            </button>
-
-          </div>
-        )}
-
         {role === "admin" && (
+
           <button
-            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg"
+            onClick={() => onDelete(event._id)}
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-semibold transition"
           >
             Delete Event
           </button>
+
         )}
 
       </div>

@@ -1,16 +1,23 @@
-const studentRouter = require('express').Router()
+const studentsRouter = require('express').Router()
 const Registration = require('../models/registration.model.js')
 const authorize = require('../middleware/authorize.middleware.js')
 
-studentRouter.get('/registrations', authorize('student'), async (request, response) => {
-    const registrations = await Registration.find({
-                        user: request.user._id,
-                        status: 'confirmed'
-                    })
-                    .populate(
-                        'event',
-                        ['title', 'date', 'venue', 'category']
-                    )
+studentsRouter.get(
+  "/registrations",
+  authorize("student"),
+  async (request, response) => {
 
-    return response.json(registrations)
-})
+    const registrations = await Registration.find({
+      user: request.user._id,
+    }).populate("event");
+
+    const validRegistrations =
+      registrations.filter(
+        (registration) => registration.event
+      );
+
+    return response.json(validRegistrations);
+  }
+);
+
+module.exports = studentsRouter;

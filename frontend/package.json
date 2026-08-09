@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.18.1",
     "dotenv": "^17.4.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.18.1",
+    "react-toastify": "^11.1.0",
+    "socket.io-client": "^4.8.3",
+    "tailwindcss": "^4.3.3",
     "zustand": "^5.0.14"
   },
   "devDependencies": {

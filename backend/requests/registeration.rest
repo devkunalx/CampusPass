@@ -1,8 +1,7 @@
 @baseUrl = http://localhost:3001/api
 
-@studentToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imt1bmFsQGV4YW1wbGUuY29tIiwiaWQiOiI2YTJiYWNhYTAwZDE2MWExMzA1M2RmZGMiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc4MTQzOTE1MCwiZXhwIjoxNzgyMDQzOTUwfQ.WsaMwAuwmqhHWdiJm_vKfn2aMO_H0X-fWACvhdfl6QY
-@organizerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9yZ2FuaXplckBleGFtcGxlLmNvbSIsImlkIjoiNmEyYmFjY2EwMGQxNjFhMTMwNTNkZmRkIiwicm9sZSI6Im9yZ2FuaXplciIsImlhdCI6MTc4MTQzOTE4NywiZXhwIjoxNzgyMDQzOTg3fQ.v1bGiyP7dgNq_trfBby7ZLoGBuokUH-hJNlpoZswkv8
-
+@studentToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imt1bmFsQGV4YW1wbGUuY29tIiwiaWQiOiI2YTYzNmI4YTFhYjY4Yzk3NWZlMDQ3YmEiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc4NDkwMDU1OCwiZXhwIjoxNzg1NTA1MzU4fQ.KYVA92t1yF2abs9BmQV8ggsIx51VRPd2RsTXXaU_GUc
+@organizerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9yZ2FuaXplcjJAZXhhbXBsZS5jb20iLCJpZCI6IjZhNjM2YjhmMWFiNjhjOTc1ZmUwNDdiYiIsInJvbGUiOiJvcmdhbml6ZXIiLCJpYXQiOjE3ODQ5MDA1OTQsImV4cCI6MTc4NTUwNTM5NH0.wZwbM_JX0xKJoNlTVCJ4jrZqwFOnADRPyyayb3cDDqo
 @eventId = 6a2fbb74f0a4117b8227c3bf
 
 ### ==========================================
