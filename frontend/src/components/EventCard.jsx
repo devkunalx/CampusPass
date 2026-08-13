@@ -18,14 +18,11 @@ const EventCard = ({
     }
   };
 
-  const seatColor =
-    event.availableSeats === 0
-      ? "bg-red-100 text-red-700"
-      : event.availableSeats <= 5
-        ? "bg-yellow-100 text-yellow-700"
-        : "bg-green-100 text-green-700";
-
   const now = new Date();
+
+  // -----------------------------
+  // Registration window
+  // -----------------------------
 
   const registrationStart = event.registrationStart
     ? new Date(event.registrationStart)
@@ -41,13 +38,28 @@ const EventCard = ({
   const registrationClosed =
     registrationEnd && now > registrationEnd;
 
+  // -----------------------------
+  // Seat color
+  // -----------------------------
+
+  const seatColor =
+    event.availableSeats === 0
+      ? "bg-red-100 text-red-700"
+      : event.availableSeats <= 5
+      ? "bg-yellow-100 text-yellow-700"
+      : "bg-green-100 text-green-700";
+
+  // -----------------------------
+  // Time formatter
+  // -----------------------------
+
   const formatTime = (time) => {
     if (!time) return "-";
 
-    const [hours, minutes] = time.split(":");
+    const [hours, minutes] = time.split(":").map(Number);
 
     const date = new Date();
-    date.setHours(hours, minutes);
+    date.setHours(hours, minutes, 0, 0);
 
     return date.toLocaleTimeString([], {
       hour: "numeric",
@@ -55,26 +67,33 @@ const EventCard = ({
     });
   };
 
-  const eventDate = new Date(event.date);
+  // -----------------------------
+  // Event start / end
+  // -----------------------------
 
-  const [startHour, startMinute] = event.startTime
-    .split(":")
-    .map(Number);
+  let eventStarted = false;
+  let eventEnded = false;
 
-  const [endHour, endMinute] = event.endTime
-    .split(":")
-    .map(Number);
+  if (event.date && event.startTime && event.endTime) {
+    const eventDate = new Date(event.date);
 
-  const eventStart = new Date(eventDate);
-  eventStart.setHours(startHour, startMinute, 0, 0);
+    const [startHour, startMinute] = event.startTime
+      .split(":")
+      .map(Number);
 
-  const eventEnd = new Date(eventDate);
-  eventEnd.setHours(endHour, endMinute, 0, 0);
+    const [endHour, endMinute] = event.endTime
+      .split(":")
+      .map(Number);
 
-  const now = new Date();
+    const eventStart = new Date(eventDate);
+    eventStart.setHours(startHour, startMinute, 0, 0);
 
-  const eventStarted = now >= eventStart;
-  const eventEnded = now >= eventEnd;
+    const eventEnd = new Date(eventDate);
+    eventEnd.setHours(endHour, endMinute, 0, 0);
+
+    eventStarted = now >= eventStart;
+    eventEnded = now >= eventEnd;
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
@@ -105,26 +124,34 @@ const EventCard = ({
 
       <div className="border-t border-gray-100 px-6 py-5 space-y-4 text-gray-700">
 
-        <div className="flex justify-between">
+        {/* Date */}
+
+        <div className="flex justify-between gap-3">
 
           <span>📅 Date</span>
 
-          <span className="font-semibold">
-            {new Date(event.date).toLocaleDateString()}
+          <span className="font-semibold text-right">
+            {event.date
+              ? new Date(event.date).toLocaleDateString()
+              : "-"}
           </span>
 
         </div>
 
-        <div className="flex justify-between">
+        {/* Event Time */}
+
+        <div className="flex justify-between gap-3">
 
           <span>🕒 Event Time</span>
 
-          <span className="font-semibold">
+          <span className="font-semibold text-right">
             {formatTime(event.startTime)} -{" "}
             {formatTime(event.endTime)}
           </span>
 
         </div>
+
+        {/* Registration Window */}
 
         <div className="flex justify-between gap-3">
 
@@ -152,6 +179,8 @@ const EventCard = ({
 
         </div>
 
+        {/* Venue */}
+
         <div className="flex justify-between gap-3">
 
           <span>📍 Venue</span>
@@ -162,15 +191,19 @@ const EventCard = ({
 
         </div>
 
+        {/* Organizer */}
+
         <div className="flex justify-between gap-3">
 
           <span>👤 Organizer</span>
 
           <span className="font-semibold text-right">
-            {event.organizer?.fullName}
+            {event.organizer?.fullName || "-"}
           </span>
 
         </div>
+
+        {/* Seats */}
 
         <div className="flex justify-between items-center">
 
@@ -190,6 +223,8 @@ const EventCard = ({
 
       <div className="bg-gray-50 p-6">
 
+        {/* Student */}
+
         {role === "student" && (
           <>
             {/* Registration Status */}
@@ -206,6 +241,12 @@ const EventCard = ({
 
                 <span className="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium">
                   Registration Closed
+                </span>
+
+              ) : eventEnded ? (
+
+                <span className="px-3 py-1 rounded-full bg-gray-200 text-gray-600 text-sm font-medium">
+                  Event Ended
                 </span>
 
               ) : (
@@ -245,13 +286,15 @@ const EventCard = ({
                 Registration Opens Soon
               </button>
 
-            ) : registrationClosed ? (
+            ) : registrationClosed || eventEnded ? (
 
               <button
                 disabled
                 className="w-full bg-red-500 text-white py-3 rounded-xl font-semibold cursor-not-allowed"
               >
-                Registration Closed
+                {eventEnded
+                  ? "Event Ended"
+                  : "Registration Closed"}
               </button>
 
             ) : event.availableSeats === 0 ? (
@@ -282,20 +325,23 @@ const EventCard = ({
           </>
         )}
 
+        {/* Admin */}
+
         {role === "admin" && (
           <button
             onClick={() => onDelete(event._id)}
             disabled={eventStarted}
-            className={`w-full py-3 rounded-xl font-semibold transition ${eventStarted
+            className={`w-full py-3 rounded-xl font-semibold transition ${
+              eventStarted
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-red-600 hover:bg-red-700 text-white"
-              }`}
+            }`}
           >
             {eventEnded
               ? "Event Ended"
               : eventStarted
-                ? "Event In Progress"
-                : "Delete Event"}
+              ? "Event In Progress"
+              : "Delete Event"}
           </button>
         )}
 
