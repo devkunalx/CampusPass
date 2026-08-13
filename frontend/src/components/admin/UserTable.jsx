@@ -1,7 +1,6 @@
 const UserTable = ({ users }) => {
   return (
     <>
-      {/* Desktop Table */}
 
       <div className="hidden md:block bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
 
@@ -31,7 +30,7 @@ const UserTable = ({ users }) => {
 
             {users.map((user) => (
               <tr
-                key={user._id}
+                key={user.email}
                 className="border-t border-gray-100 hover:bg-blue-50 transition"
               >
 
@@ -68,13 +67,12 @@ const UserTable = ({ users }) => {
 
       </div>
 
-      {/* Mobile Cards */}
 
       <div className="md:hidden space-y-4">
 
         {users.map((user) => (
           <div
-            key={user._id}
+            key={user.email}
             className="bg-white rounded-2xl shadow-md border border-gray-200 p-5"
           >
 
