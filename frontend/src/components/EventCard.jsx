@@ -22,8 +22,8 @@ const EventCard = ({
     event.availableSeats === 0
       ? "bg-red-100 text-red-700"
       : event.availableSeats <= 5
-      ? "bg-yellow-100 text-yellow-700"
-      : "bg-green-100 text-green-700";
+        ? "bg-yellow-100 text-yellow-700"
+        : "bg-green-100 text-green-700";
 
   const now = new Date();
 
@@ -54,6 +54,27 @@ const EventCard = ({
       minute: "2-digit",
     });
   };
+
+  const eventDate = new Date(event.date);
+
+  const [startHour, startMinute] = event.startTime
+    .split(":")
+    .map(Number);
+
+  const [endHour, endMinute] = event.endTime
+    .split(":")
+    .map(Number);
+
+  const eventStart = new Date(eventDate);
+  eventStart.setHours(startHour, startMinute, 0, 0);
+
+  const eventEnd = new Date(eventDate);
+  eventEnd.setHours(endHour, endMinute, 0, 0);
+
+  const now = new Date();
+
+  const eventStarted = now >= eventStart;
+  const eventEnded = now >= eventEnd;
 
   return (
     <div className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
@@ -262,14 +283,20 @@ const EventCard = ({
         )}
 
         {role === "admin" && (
-
           <button
             onClick={() => onDelete(event._id)}
-            className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-semibold transition"
+            disabled={eventStarted}
+            className={`w-full py-3 rounded-xl font-semibold transition ${eventStarted
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-red-600 hover:bg-red-700 text-white"
+              }`}
           >
-            Delete Event
+            {eventEnded
+              ? "Event Ended"
+              : eventStarted
+                ? "Event In Progress"
+                : "Delete Event"}
           </button>
-
         )}
 
       </div>
