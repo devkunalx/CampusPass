@@ -1,32 +1,7 @@
-let io;
+import { io } from "socket.io-client";
 
-const init = (server) => {
-  const { Server } = require("socket.io");
+const socket = io(import.meta.env.VITE_API_URL, {
+  withCredentials: true,
+});
 
-  const allowedOrigin =
-    import.meta.env.VITE_API_URL || "http://localhost:5173";
-
-  io = new Server(server, {
-    cors: {
-      origin: allowedOrigin,
-      credentials: true,
-    },
-  });
-
-  return io;
-};
-
-const getIO = () => {
-  if (!io) {
-    throw new Error(
-      "Socket.IO has not been initialized."
-    );
-  }
-
-  return io;
-};
-
-module.exports = {
-  init,
-  getIO,
-};
+export default socket;
