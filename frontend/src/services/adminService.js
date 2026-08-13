@@ -1,13 +1,13 @@
 import api from "./api";
 
 const getDashboard = async () => {
-  const response = await api.get("/admin/dashboard");
+  const response = await api.get("/api/admin/dashboard");
   return response.data;
 };
 
 const getUsers = async (page = 1, limit = 10) => {
   const response = await api.get(
-    `/admin/users?page=${page}&limit=${limit}`
+    `/api/admin/users?page=${page}&limit=${limit}`
   );
 
   return response.data;
@@ -15,7 +15,7 @@ const getUsers = async (page = 1, limit = 10) => {
 
 const getEvents = async (page = 1, limit = 6) => {
   const response = await api.get(
-    `/admin/events?page=${page}&limit=${limit}`
+    `/api/admin/events?page=${page}&limit=${limit}`
   );
 
   return response.data;
@@ -23,7 +23,7 @@ const getEvents = async (page = 1, limit = 6) => {
 
 const deleteEvent = async (eventId) => {
   const response = await api.delete(
-    `/admin/events/${eventId}`
+    `/api/admin/events/${eventId}`
   );
 
   return response.data;
