@@ -8,12 +8,71 @@ const OrganizerEventCard = ({
   event,
   removeEvent,
 }) => {
-  const [deleting, setDeleting] =
-    useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const navigate = useNavigate();
 
+  const now = new Date();
+
+  // -----------------------------
+  // Registration window
+  // -----------------------------
+
+  const registrationStart = event.registrationStart
+    ? new Date(event.registrationStart)
+    : null;
+
+  const registrationEnd = event.registrationEnd
+    ? new Date(event.registrationEnd)
+    : null;
+
+  let registrationStatus = "Open";
+  let statusColor = "bg-green-100 text-green-700";
+
+  if (registrationStart && now < registrationStart) {
+    registrationStatus = "Opens Soon";
+    statusColor = "bg-blue-100 text-blue-700";
+  } else if (registrationEnd && now > registrationEnd) {
+    registrationStatus = "Closed";
+    statusColor = "bg-red-100 text-red-700";
+  }
+
+  // -----------------------------
+  // Event start / end
+  // -----------------------------
+
+  let eventStarted = false;
+  let eventEnded = false;
+
+  if (event.date && event.startTime && event.endTime) {
+    const eventDate = new Date(event.date);
+
+    const [startHour, startMinute] = event.startTime
+      .split(":")
+      .map(Number);
+
+    const [endHour, endMinute] = event.endTime
+      .split(":")
+      .map(Number);
+
+    const eventStart = new Date(eventDate);
+    eventStart.setHours(startHour, startMinute, 0, 0);
+
+    const eventEnd = new Date(eventDate);
+    eventEnd.setHours(endHour, endMinute, 0, 0);
+
+    eventStarted = now >= eventStart;
+    eventEnded = now >= eventEnd;
+  }
+
+  // -----------------------------
+  // Delete
+  // -----------------------------
+
   const handleDelete = async () => {
+    // Extra protection in frontend
+    if (eventStarted) return;
+
     const confirmed = window.confirm(
       `Are you sure you want to delete "${event.title}"?`
     );
@@ -23,15 +82,11 @@ const OrganizerEventCard = ({
     try {
       setDeleting(true);
 
-      await organizerServices.deleteEvent(
-        event._id
-      );
+      await organizerServices.deleteEvent(event._id);
 
       removeEvent(event._id);
 
-      toast.success(
-        "Event deleted successfully!"
-      );
+      toast.success("Event deleted successfully!");
     } catch (error) {
       toast.error(
         error.response?.data?.error ||
@@ -42,29 +97,9 @@ const OrganizerEventCard = ({
     }
   };
 
-  const now = new Date();
-
-  const registrationStart = new Date(
-    event.registrationStart
-  );
-
-  const registrationEnd = new Date(
-    event.registrationEnd
-  );
-
-  let registrationStatus = "Open";
-  let statusColor =
-    "bg-green-100 text-green-700";
-
-  if (now < registrationStart) {
-    registrationStatus = "Opens Soon";
-    statusColor =
-      "bg-blue-100 text-blue-700";
-  } else if (now > registrationEnd) {
-    registrationStatus = "Closed";
-    statusColor =
-      "bg-red-100 text-red-700";
-  }
+  // -----------------------------
+  // Seats
+  // -----------------------------
 
   const seatColor =
     event.availableSeats === 0
@@ -72,6 +107,24 @@ const OrganizerEventCard = ({
       : event.availableSeats <= 5
       ? "text-yellow-600"
       : "text-green-600";
+
+  // -----------------------------
+  // Time formatter
+  // -----------------------------
+
+  const formatTime = (time) => {
+    if (!time) return "-";
+
+    const [hours, minutes] = time.split(":").map(Number);
+
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+
+    return date.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition duration-300 overflow-hidden">
@@ -93,7 +146,7 @@ const OrganizerEventCard = ({
         </div>
 
         <p className="mt-4 text-gray-500 line-clamp-3">
-          {event.description}
+          {event.description || "No description available."}
         </p>
 
       </div>
@@ -102,44 +155,64 @@ const OrganizerEventCard = ({
 
       <div className="border-t border-gray-100 px-6 py-5 space-y-4 text-gray-700">
 
-        <div className="flex justify-between">
+        {/* Date */}
+
+        <div className="flex justify-between gap-3">
 
           <span>📅 Date</span>
 
-          <span className="font-semibold">
-            {new Date(
-              event.date
-            ).toLocaleDateString()}
+          <span className="font-semibold text-right">
+            {event.date
+              ? new Date(event.date).toLocaleDateString()
+              : "-"}
           </span>
 
         </div>
 
-        <div className="flex justify-between">
+        {/* Event Time */}
+
+        <div className="flex justify-between gap-3">
 
           <span>🕒 Time</span>
 
-          <span className="font-semibold">
-            {event.startTime} -{" "}
-            {event.endTime}
+          <span className="font-semibold text-right">
+            {formatTime(event.startTime)} -{" "}
+            {formatTime(event.endTime)}
           </span>
 
         </div>
+
+        {/* Registration */}
 
         <div className="flex justify-between items-start gap-3">
 
           <span>📝 Registration</span>
 
-          <span className="text-right text-sm font-medium">
-            {registrationStart.toLocaleString()}
-            <br />
-            to
-            <br />
-            {registrationEnd.toLocaleString()}
-          </span>
+          <div className="text-right text-sm font-medium">
+
+            <p>
+              {registrationStart
+                ? registrationStart.toLocaleString()
+                : "-"}
+            </p>
+
+            <p className="my-1 text-gray-400">
+              to
+            </p>
+
+            <p>
+              {registrationEnd
+                ? registrationEnd.toLocaleString()
+                : "-"}
+            </p>
+
+          </div>
 
         </div>
 
-        <div className="flex justify-between">
+        {/* Registration Status */}
+
+        <div className="flex justify-between items-center">
 
           <span>Status</span>
 
@@ -151,53 +224,89 @@ const OrganizerEventCard = ({
 
         </div>
 
-        <div className="flex justify-between">
+        {/* Venue */}
+
+        <div className="flex justify-between gap-3">
 
           <span>📍 Venue</span>
 
           <span className="font-semibold text-right">
-            {event.venue}
+            {event.venue || "-"}
           </span>
 
         </div>
 
-        <div className="flex justify-between">
+        {/* Seats */}
+
+        <div className="flex justify-between items-center">
 
           <span>Seats</span>
 
-          <span
-            className={`font-bold ${seatColor}`}
-          >
-            {event.availableSeats}/
-            {event.totalSeats}
+          <span className={`font-bold ${seatColor}`}>
+            {event.availableSeats}/{event.totalSeats}
           </span>
 
         </div>
 
       </div>
 
+      {/* Event Status */}
+
+      {eventStarted && (
+        <div className="px-6 pt-5">
+
+          <div className="bg-gray-100 text-gray-600 text-sm text-center rounded-xl px-4 py-3 font-medium">
+            {eventEnded
+              ? "This event has ended."
+              : "This event is currently in progress."}
+          </div>
+
+        </div>
+      )}
+
       {/* Footer */}
 
       <div className="bg-gray-50 p-6 flex flex-col gap-3">
 
+        {/* Edit */}
+
         <button
-          onClick={() =>
-            navigate(
-              `/edit-event/${event._id}`
-            )
-          }
-          className="bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-xl font-semibold transition"
+          onClick={() => {
+            if (!eventStarted) {
+              navigate(`/edit-event/${event._id}`);
+            }
+          }}
+          disabled={eventStarted}
+          className={`w-full py-3 rounded-xl font-semibold transition ${
+            eventStarted
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-yellow-500 hover:bg-yellow-600 text-white"
+          }`}
         >
-          Edit Event
+          {eventEnded
+            ? "Editing Closed"
+            : eventStarted
+            ? "Event In Progress"
+            : "Edit Event"}
         </button>
+
+        {/* Delete */}
 
         <button
           onClick={handleDelete}
-          disabled={deleting}
-          className="bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-semibold transition disabled:bg-red-300 disabled:cursor-not-allowed"
+          disabled={deleting || eventStarted}
+          className={`w-full py-3 rounded-xl font-semibold transition ${
+            eventStarted
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-red-600 hover:bg-red-700 text-white disabled:bg-red-300 disabled:cursor-not-allowed"
+          }`}
         >
           {deleting
             ? "Deleting..."
+            : eventEnded
+            ? "Deletion Closed"
+            : eventStarted
+            ? "Event In Progress"
             : "Delete Event"}
         </button>
 
